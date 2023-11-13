@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<wsdl:definitions
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://soap-service:8888/consultar_con_soap"
+    targetNamespace="http://soap-service:8888/consultar_con_soap"
+>
+    <wsdl:types>
+        <xs:schema
+            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://soap-service:8888/consultar_con_soap"
+        >
+            <xs:element name="consultarPersonasRequest">
+                <xs:complexType>
+                    <!-- Define aquí los parámetros de entrada si es necesario -->
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="consultarPersonasResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" type="xs:string" minOccurs="0" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+
+    <wsdl:message name="consultarPersonasInput">
+        <wsdl:part name="parameters" element="tns:consultarPersonasRequest" />
+    </wsdl:message>
+    <wsdl:message name="consultarPersonasOutput">
+        <wsdl:part name="parameters" element="tns:consultarPersonasResponse" />
+    </wsdl:message>
+
+    <wsdl:portType name="ConsultarPersonasPortType">
+        <wsdl:operation name="consultarPersonas">
+            <wsdl:input message="tns:consultarPersonasInput" />
+            <wsdl:output message="tns:consultarPersonasOutput" />
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding
+        name="ConsultarPersonasBinding"
+        type="tns:ConsultarPersonasPortType"
+    >
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+
+        <wsdl:operation name="consultarPersonas">
+            <soap:operation soapAction="http://soap-service:8888/consultarPersonas" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="ConsultarPersonasService">
+        <wsdl:port binding="tns:ConsultarPersonasBinding" name="ConsultarPersonasPort">
+            <soap:address location="http://soap-service:8888/consultar_con_soap" />
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  database:
+    image: db-image
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: examenDocker
+    deploy:
+      replicas: 1
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./base-de-datos/datos/:/var/lib/mysql/
+    networks:
+      - mynetwork
+
+  frontend:
+    image: app-image
+    depends_on:
+      - rest-service
+      - soap-service
+    ports:
+      - "3000:80"
+    deploy:
+      replicas: 2
+    networks:
+      - mynetwork
+
+  rest-service:
+    image: rest-image
+    depends_on:
+      - database
+    ports:
+      - "8080:8080" 
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    command: >
+      sh -c "while ! nc -z database 3306; do sleep 1; done; node index.js"
+    networks:
+      - mynetwork
+
+  soap-service:
+    image: soap-image
+    depends_on:
+      - database
+    ports:
+      - "8888:8888"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    command: >
+      sh -c "while ! nc -z database 3306; do sleep 1; done; node index.js"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
