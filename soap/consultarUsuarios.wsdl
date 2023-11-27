@@ -1,0 +1,47 @@
+<definitions name="ConsultarUsuariosService"
+             targetNamespace="http://localhost:8888/consultar_con_soap"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="http://localhost:8888/consultar_con_soap"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <message name="ConsultarUsuariosRequest"/>
+
+    <message name="Usuario">
+        <part name="id" type="xsd:int"/>
+        <part name="nomUsuario" type="xsd:string"/>
+        <part name="perfil" type="xsd:string"/>
+        <part name="activo" type="xsd:boolean"/>
+    </message>
+
+    <message name="ConsultarUsuariosResponse">
+        <part name="usuarios" type="tns:Usuario" maxOccurs="unbounded"/>
+    </message>
+
+    <portType name="ConsultarUsuariosPortType">
+        <operation name="consultarUsuarios">
+            <input message="tns:ConsultarUsuariosRequest"/>
+            <output message="tns:ConsultarUsuariosResponse"/>
+        </operation>
+    </portType>
+
+    <binding name="ConsultarUsuariosBinding" type="tns:ConsultarUsuariosPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="consultarUsuarios">
+            <soap:operation soapAction="urn:consultarUsuarios"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:consultarUsuarios" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:consultarUsuarios" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+    </binding>
+
+    <service name="ConsultarUsuariosService">
+        <port name="ConsultarUsuariosPort" binding="tns:ConsultarUsuariosBinding">
+            <soap:address location="http://localhost:8888/consultar_con_soap"/>
+        </port>
+    </service>
+
+</definitions>

@@ -1,0 +1,48 @@
+version: '3.7'
+
+services:
+  mysql:
+    image: mysql-image
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: examenDocker
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/datos/:/var/lib/mysql/
+    networks:
+        - mynetwork
+    deploy:
+      replicas: 1 
+
+  rest:
+    image: rest-image
+    ports:
+      - "8080:8080"
+    networks:
+      - mynetwork
+    deploy:
+      replicas: 1 
+
+  soap:
+    image: soap-image
+    ports:
+      - "8888:8888"
+    networks:
+      - mynetwork
+    deploy:
+      replicas: 1
+
+  service-cliente   :
+    image: front-image
+    ports:
+      - "3000:80"
+    networks:
+      - mynetwork
+    deploy:
+      replicas: 4 
+  
+  
+
+networks:
+  mynetwork:
